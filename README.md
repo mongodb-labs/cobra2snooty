@@ -1,4 +1,5 @@
 # cobra2snooty
+[![CI](https://github.com/mongodb-labs/cobra2snooty/actions/workflows/pr.yml/badge.svg)](https://github.com/mongodb-labs/cobra2snooty/actions/workflows/pr.yml)
 
 WIP
 

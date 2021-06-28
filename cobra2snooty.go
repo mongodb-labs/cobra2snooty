@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package rest was mostly inspired by github.com/spf13/cobra/doc
+// Package cobra2snooty was mostly inspired by https://github.com/spf13/cobra/tree/master/doc
 // but with some changes to match the expected formats and styles of our writers and tools.
-package rest
+package cobra2snooty
 
 import (
 	"bytes"
@@ -34,13 +34,13 @@ const (
 	defaultExtension = ".txt"
 )
 
-// GenReSTTree generates the docs for the full tree of commands.
-func GenReSTTree(cmd *cobra.Command, dir string) error {
+// GenSnootyTree generates the docs for the full tree of commands.
+func GenSnootyTree(cmd *cobra.Command, dir string) error {
 	for _, c := range cmd.Commands() {
 		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() {
 			continue
 		}
-		if err := GenReSTTree(c, dir); err != nil {
+		if err := GenSnootyTree(c, dir); err != nil {
 			return err
 		}
 	}
@@ -53,7 +53,7 @@ func GenReSTTree(cmd *cobra.Command, dir string) error {
 	}
 	defer f.Close()
 
-	return GenReSTCustom(cmd, f)
+	return GenSnootyCustom(cmd, f)
 }
 
 const toc = `
@@ -83,9 +83,9 @@ const tocHeader = `
    :titlesonly:
 `
 
-// GenReSTCustom creates custom reStructured Text output.
-// Adapted from github.com/spf13/cobra/doc to match MongoDB tooling and style.
-func GenReSTCustom(cmd *cobra.Command, w io.Writer) error {
+// GenSnootyCustom creates custom reStructured Text output.
+// Adapted from https://github.com/spf13/cobra/tree/master/doc to match MongoDB tooling and style.
+func GenSnootyCustom(cmd *cobra.Command, w io.Writer) error {
 	cmd.InitDefaultHelpCmd()
 	cmd.InitDefaultHelpFlag()
 
@@ -109,8 +109,8 @@ func GenReSTCustom(cmd *cobra.Command, w io.Writer) error {
 		buf.WriteString(syntaxHeader)
 		buf.WriteString(fmt.Sprintf("\n   %s\n\n", strings.ReplaceAll(cmd.UseLine(), "[flags]", "[options]")))
 	}
-	printArgsReST(buf, cmd)
-	printOptionsReST(buf, cmd)
+	printArgsSnooty(buf, cmd)
+	printOptionsSnooty(buf, cmd)
 
 	if len(cmd.Example) > 0 {
 		buf.WriteString(examplesHeader)
@@ -187,7 +187,7 @@ const optionsHeader = `.. list-table::
      - Description
 `
 
-func printArgsReST(buf *bytes.Buffer, cmd *cobra.Command) {
+func printArgsSnooty(buf *bytes.Buffer, cmd *cobra.Command) {
 	if args, ok := cmd.Annotations["args"]; ok {
 		buf.WriteString("Arguments\n")
 		buf.WriteString("---------\n\n")
@@ -207,7 +207,7 @@ func printArgsReST(buf *bytes.Buffer, cmd *cobra.Command) {
 	}
 }
 
-func printOptionsReST(buf *bytes.Buffer, cmd *cobra.Command) {
+func printOptionsSnooty(buf *bytes.Buffer, cmd *cobra.Command) {
 	flags := cmd.NonInheritedFlags()
 	if flags.HasAvailableFlags() {
 		buf.WriteString("Options\n")
@@ -225,29 +225,4 @@ func printOptionsReST(buf *bytes.Buffer, cmd *cobra.Command) {
 		buf.WriteString(indentString(FlagUsages(parentFlags), " "))
 		buf.WriteString("\n")
 	}
-}
-
-// adapted from: https://github.com/kr/text/blob/main/indent.go
-func indentString(s, p string) string {
-	var res []byte
-	b := []byte(s)
-	prefix := []byte(p)
-	bol := true
-	for _, c := range b {
-		if bol && c != '\n' {
-			res = append(res, prefix...)
-		}
-		res = append(res, c)
-		bol = c == '\n'
-	}
-	return string(res)
-}
-
-func stringInSlice(a []string, x string) bool {
-	for _, b := range a {
-		if b == x {
-			return true
-		}
-	}
-	return false
 }

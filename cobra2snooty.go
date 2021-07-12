@@ -34,7 +34,7 @@ const (
 	defaultExtension = ".txt"
 )
 
-// GenTree generates the docs for the full tree of commands.
+// GenTreeDocs generates the docs for the full tree of commands.
 func GenTreeDocs(cmd *cobra.Command, dir string) error {
 	for _, c := range cmd.Commands() {
 		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() {

@@ -37,7 +37,7 @@ func printArgs(buf *bytes.Buffer, cmd *cobra.Command) error {
 				line := fmt.Sprintf("   * - %s\n     - string\n     - %v\n     - %s", arg, required, description)
 				buf.WriteString(line)
 			} else {
-				return fmt.Errorf("%w: %s", ErrMissingDescription, arg)
+				return fmt.Errorf("%w: %s - %s", ErrMissingDescription, cmd.Use, arg)
 			}
 		}
 		buf.WriteString("\n\n")

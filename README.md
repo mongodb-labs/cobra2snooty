@@ -3,7 +3,7 @@
 
 ## Generate Snooty docs for the entire command tree
 
-This program can actually generate docs for the mongocli command in the mongocli project
+This program can actually generate docs for the `mongocli` command in the MongoDB CLI project
 
 ```go
 package main

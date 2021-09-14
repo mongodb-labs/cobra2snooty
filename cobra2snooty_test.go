@@ -2,6 +2,7 @@ package cobra2snooty
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -52,11 +53,17 @@ func Echo() *cobra.Command {
 		return echoCmd
 	}
 	echoCmd = &cobra.Command{
-		Use:     "echo [string to echo]",
+		Use:     "echo <string to echo> [test param]",
 		Aliases: []string{"say"},
 		Short:   "Echo anything to the screen",
 		Long:    "an utterly useless command for testing",
 		Example: "Just run root echo",
+		Annotations: map[string]string{
+			"args":                "string to print, test param",
+			"requiredArgs":        "string to print",
+			"string to printDesc": "A string to print",
+			"test paramDesc":      "just for testing",
+		},
 	}
 	echoCmd.PersistentFlags().StringP("strone", "s", "one", "help message for flag strone")
 	echoCmd.PersistentFlags().BoolP("persistentbool", "p", false, "help message for flag persistentbool")
@@ -113,6 +120,9 @@ func TestGenDocs(t *testing.T) {
 	checkStringContains(t, output, Echo().Example)
 	checkStringContains(t, output, "boolone")
 	checkStringContains(t, output, "rootflag")
+	//
+	checkStringContains(t, output, fmt.Sprintf("   * - string to print\n     - string\n     - true\n     - %s\n", Echo().Annotations["string to printDesc"]))
+	checkStringContains(t, output, fmt.Sprintf("   * - test param\n     - string\n     - false\n     - %s\n", Echo().Annotations["test paramDesc"]))
 	checkStringOmits(t, output, Root().Short)
 	checkStringContains(t, output, EchoSubCmd().Short)
 	checkStringOmits(t, output, deprecatedCmd.Short)
@@ -165,11 +175,11 @@ func TestGenTreeDocs(t *testing.T) {
 	defer os.RemoveAll(tmpdir)
 
 	if err := GenTreeDocs(c, tmpdir); err != nil {
-		t.Fatalf("GenReSTTree failed: %s", err.Error())
+		t.Fatalf("GenTreeDocs failed: %s", err.Error())
 	}
 
 	if _, err := os.Stat(filepath.Join(tmpdir, "do.txt")); err != nil {
-		t.Fatalf("Expected file 'do.rst' to exist")
+		t.Fatalf("Expected file 'do.txt' to exist")
 	}
 }
 

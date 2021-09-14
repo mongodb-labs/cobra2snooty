@@ -57,6 +57,10 @@ func Echo() *cobra.Command {
 		Short:   "Echo anything to the screen",
 		Long:    "an utterly useless command for testing",
 		Example: "Just run root echo",
+		Annotations: map[string]string{
+			"args":                "string to print",
+			"string to printDesc": "A string to print",
+		},
 	}
 	echoCmd.PersistentFlags().StringP("strone", "s", "one", "help message for flag strone")
 	echoCmd.PersistentFlags().BoolP("persistentbool", "p", false, "help message for flag persistentbool")
@@ -113,6 +117,7 @@ func TestGenDocs(t *testing.T) {
 	checkStringContains(t, output, Echo().Example)
 	checkStringContains(t, output, "boolone")
 	checkStringContains(t, output, "rootflag")
+	checkStringContains(t, output, Echo().Annotations["string to printDesc"])
 	checkStringOmits(t, output, Root().Short)
 	checkStringContains(t, output, EchoSubCmd().Short)
 	checkStringOmits(t, output, deprecatedCmd.Short)

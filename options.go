@@ -32,15 +32,16 @@ func printArgs(buf *bytes.Buffer, cmd *cobra.Command) error {
 		}
 
 		for _, arg := range strings.Split(args, ",") {
-			required := stringInSlice(requiredSlice, arg)
-			if description, hasDescription := cmd.Annotations[arg+"Desc"]; hasDescription {
-				line := fmt.Sprintf("   * - %s\n     - string\n     - %v\n     - %s", arg, required, description)
+			trimmedArg := strings.TrimSpace(arg)
+			required := stringInSlice(requiredSlice, trimmedArg)
+			if description, hasDescription := cmd.Annotations[trimmedArg+"Desc"]; hasDescription {
+				line := fmt.Sprintf("   * - %s\n     - string\n     - %v\n     - %s\n", trimmedArg, required, description)
 				buf.WriteString(line)
 			} else {
-				return fmt.Errorf("%w: %s - %s", ErrMissingDescription, cmd.Use, arg)
+				return fmt.Errorf("%w: %s - %s", ErrMissingDescription, cmd.Use, trimmedArg)
 			}
 		}
-		buf.WriteString("\n\n")
+		buf.WriteString("\n")
 	}
 	return nil
 }

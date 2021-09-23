@@ -101,6 +101,7 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 	buf.WriteString(toc)
 	buf.WriteString("\n" + cmd.Short + "\n")
 	if long := cmd.Long; long != "" {
+		// remove when https://github.com/spf13/cobra/pull/1495 is released
 		if strings.Contains(name, "completion bash") {
 			long = bashCompletionLong(cmd)
 		}

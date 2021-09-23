@@ -100,8 +100,12 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 	buf.WriteString(strings.Repeat("=", len(name)) + "\n")
 	buf.WriteString(toc)
 	buf.WriteString("\n" + cmd.Short + "\n")
-	if cmd.Long != "" {
-		buf.WriteString("\n" + cmd.Long + "\n")
+	if long := cmd.Long; long != "" {
+		// remove when https://github.com/spf13/cobra/pull/1495 is released
+		if strings.Contains(name, "completion bash") {
+			long = bashCompletionLong(cmd)
+		}
+		buf.WriteString("\n" + long + "\n")
 	}
 	buf.WriteString("\n")
 
@@ -158,6 +162,22 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 	}
 	_, err := buf.WriteTo(w)
 	return err
+}
+
+func bashCompletionLong(cmd *cobra.Command) string {
+	return fmt.Sprintf(`
+Generate the autocompletion script for the bash shell.
+This script depends on the 'bash-completion' package.
+If it is not installed already, you can install it via your OS's package manager.
+To load completions in your current shell session:
+$ source <(%[1]s completion bash)
+To load completions for every new session, execute once:
+Linux:
+$ %[1]s completion bash > /etc/bash_completion.d/%[1]s
+MacOS:
+$ %[1]s completion bash > /usr/local/etc/bash_completion.d/%[1]s
+You will need to start a new shell for this setup to take effect.
+`, cmd.Root().Name())
 }
 
 // Test to see if we have a reason to print See Also information in docs

@@ -9,7 +9,7 @@ linters-settings:
     disabled-checks:
       - octalLiteral
   gocyclo:
-    min-complexity: 15
+    min-complexity: 16
   govet:
     check-shadowing: true
   maligned:

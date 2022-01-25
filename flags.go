@@ -76,9 +76,9 @@ func FlagUsages(f *pflag.FlagSet) string {
 		line += "\n    - " + usage
 		if !defaultIsZeroValue(flag) {
 			if flag.Value.Type() == stringType {
-				line += fmt.Sprintf(" (default %q)", flag.DefValue)
+				line += fmt.Sprintf(" (default %q).", flag.DefValue)
 			} else {
-				line += fmt.Sprintf(" (default %s)", flag.DefValue)
+				line += fmt.Sprintf(" (default %s).", flag.DefValue)
 			}
 		}
 		if flag.Deprecated != "" {

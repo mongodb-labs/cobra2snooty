@@ -59,7 +59,7 @@ func FlagUsages(f *pflag.FlagSet) string {
 		if flag.NoOptDefVal != "" {
 			switch flag.Value.Type() {
 			case stringType:
-				line += fmt.Sprintf("[=\"%s\"]", flag.NoOptDefVal)
+				line += fmt.Sprintf("[=%q]", flag.NoOptDefVal)
 			case boolType:
 				if flag.NoOptDefVal != "true" {
 					line += fmt.Sprintf("[=%s]", flag.NoOptDefVal)

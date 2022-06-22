@@ -133,7 +133,7 @@ func TestGenDocsNoHiddenParents(t *testing.T) {
 	for _, name := range []string{"rootflag", "strtwo"} {
 		f := Root().PersistentFlags().Lookup(name)
 		f.Hidden = true
-		defer func() { f.Hidden = false }()
+		t.Cleanup(func() { f.Hidden = false })
 	}
 	buf := new(bytes.Buffer)
 	if err := GenDocs(Echo(), buf); err != nil {

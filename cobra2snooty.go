@@ -112,6 +112,7 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 	if cmd.Runnable() {
 		buf.WriteString(syntaxHeader)
 		buf.WriteString(fmt.Sprintf("\n   %s\n\n", strings.ReplaceAll(cmd.UseLine(), "[flags]", "[options]")))
+		buf.WriteString(".. Code end marker, please don't delete this comment\n\n")
 	}
 	if err := printArgs(buf, cmd); err != nil {
 		return err

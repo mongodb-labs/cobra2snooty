@@ -53,14 +53,12 @@ func Echo() *cobra.Command {
 		return echoCmd
 	}
 	echoCmd = &cobra.Command{
-		Use:     "echo <string to echo> [test param]",
+		Use:     "echo <string to print> [test param]",
 		Aliases: []string{"say"},
 		Short:   "Echo anything to the screen",
 		Long:    "an utterly useless command for testing",
 		Example: "Just run root echo",
 		Annotations: map[string]string{
-			"args":                "string to print, test param",
-			"requiredArgs":        "string to print",
 			"string to printDesc": "A string to print",
 			"test paramDesc":      "just for testing",
 		},
@@ -108,7 +106,7 @@ var deprecatedCmd = &cobra.Command{
 }
 
 func TestGenDocs(t *testing.T) {
-	// We generate on a subcommand so we have both subcommands and parents
+	// We generate on a subcommand, so we have both subcommands and parents
 	buf := new(bytes.Buffer)
 	Root() // init root
 	if err := GenDocs(Echo(), buf); err != nil {
@@ -166,7 +164,13 @@ func TestGenDocsNoTag(t *testing.T) {
 }
 
 func TestGenTreeDocs(t *testing.T) {
-	c := &cobra.Command{Use: "do [OPTIONS] arg1 arg2"}
+	c := &cobra.Command{
+		Use: "do <arg1> [arg2]",
+		Annotations: map[string]string{
+			"arg1Desc": "desc",
+			"arg2Desc": "desc",
+		},
+	}
 
 	tmpdir, err := ioutil.TempDir("", "test-gen-rst-tree")
 	if err != nil {
@@ -211,4 +215,40 @@ func checkStringOmits(t *testing.T, got, expected string) {
 	if strings.Contains(got, expected) {
 		t.Errorf("Expected to not contain: \n %v\nGot: %v", expected, got)
 	}
+}
+
+func TestArgsRegex(t *testing.T) {
+	t.Run("simple", func(t *testing.T) {
+		result := argsRegex.FindAllString("<arg1> [arg2]", -1)
+		expected := []string{"<arg1>", "[arg2]"}
+		for i := range result {
+			if result[i] != expected[i] {
+				t.Fatalf("expected: %s, got: %s\n", expected[i], result[i])
+			}
+		}
+	})
+	t.Run("with spaces", func(t *testing.T) {
+		result := argsRegex.FindAllString("<this arg1> [that arg2]", -1)
+		expected := []string{"<this arg1>", "[that arg2]"}
+		for i := range result {
+			if result[i] != expected[i] {
+				t.Fatalf("expected: %s, got: %s\n", expected[i], result[i])
+			}
+		}
+	})
+	t.Run("repeating", func(t *testing.T) {
+		result := argsRegex.FindAllString("<arg1>... [arg2]...", -1)
+		expected := []string{"<arg1>", "[arg2]"}
+		for i := range result {
+			if result[i] != expected[i] {
+				t.Fatalf("expected: %s, got: %s\n", expected[i], result[i])
+			}
+		}
+	})
+	t.Run("empty", func(t *testing.T) {
+		result := argsRegex.FindAllString("<> []", -1)
+		if len(result) != 0 {
+			t.Fatalf("expected no matches\n")
+		}
+	})
 }

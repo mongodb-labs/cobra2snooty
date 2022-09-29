@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -19,30 +20,31 @@ const optionsHeader = `.. list-table::
      - Description
 `
 
-var ErrMissingDescription = errors.New("missing description")
+var (
+	ErrMissingDescription = errors.New("missing description")
+	argsRegex             = regexp.MustCompile(`<.+>|\[.+]`)
+)
 
 func printArgs(buf *bytes.Buffer, cmd *cobra.Command) error {
-	if args, ok := cmd.Annotations["args"]; ok {
+	u := argsRegex.FindAllString(cmd.Use, -1)
+	if len(u) == 0 {
+		return nil
+	}
+	for _, a := range u {
 		buf.WriteString("Arguments\n")
 		buf.WriteString("---------\n\n")
 		buf.WriteString(optionsHeader)
-		var requiredSlice []string
-		if requiredArgs, hasRequired := cmd.Annotations["requiredArgs"]; hasRequired {
-			requiredSlice = strings.Split(requiredArgs, ",")
+		value := a[1 : len(a)-1]
+		if description, hasDescription := cmd.Annotations[value+"Desc"]; hasDescription {
+			required := strings.HasPrefix(a, "<")
+			line := fmt.Sprintf("   * - %s\n     - string\n     - %v\n     - %s\n", value, required, description)
+			buf.WriteString(line)
+		} else {
+			return fmt.Errorf("%w: %s - %s", ErrMissingDescription, cmd.CommandPath(), value)
 		}
-
-		for _, arg := range strings.Split(args, ",") {
-			trimmedArg := strings.TrimSpace(arg)
-			required := stringInSlice(requiredSlice, trimmedArg)
-			if description, hasDescription := cmd.Annotations[trimmedArg+"Desc"]; hasDescription {
-				line := fmt.Sprintf("   * - %s\n     - string\n     - %v\n     - %s\n", trimmedArg, required, description)
-				buf.WriteString(line)
-			} else {
-				return fmt.Errorf("%w: %s - %s", ErrMissingDescription, cmd.Use, trimmedArg)
-			}
-		}
-		buf.WriteString("\n")
 	}
+	buf.WriteString("\n")
+
 	return nil
 }
 

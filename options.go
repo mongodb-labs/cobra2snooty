@@ -44,10 +44,10 @@ func printArgs(buf *bytes.Buffer, cmd *cobra.Command) error {
 	if len(u) == 0 {
 		return nil
 	}
+	buf.WriteString("Arguments\n")
+	buf.WriteString("---------\n\n")
+	buf.WriteString(optionsHeader)
 	for _, a := range u {
-		buf.WriteString("Arguments\n")
-		buf.WriteString("---------\n\n")
-		buf.WriteString(optionsHeader)
 		value := a[1 : len(a)-1]
 		if description, hasDescription := cmd.Annotations[value+"Desc"]; hasDescription {
 			required := strings.HasPrefix(a, "<")

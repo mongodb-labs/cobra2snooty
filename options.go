@@ -36,7 +36,7 @@ const optionsHeader = `.. list-table::
 
 var (
 	ErrMissingDescription = errors.New("missing description")
-	argsRegex             = regexp.MustCompile(`<.+>|\[.+]`)
+	argsRegex             = regexp.MustCompile(`<[^>]+>|\[[^]]+]`)
 )
 
 func printArgs(buf *bytes.Buffer, cmd *cobra.Command) error {

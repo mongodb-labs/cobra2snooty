@@ -265,4 +265,13 @@ func TestArgsRegex(t *testing.T) {
 			t.Fatalf("expected no matches\n")
 		}
 	})
+	t.Run("complex", func(t *testing.T) {
+		result := argsRegex.FindAllString("<this arg1> <that arg2> [optional] [long option]", -1)
+		expected := []string{"<this arg1>", "<that arg2>", "[optional]", "[long option]"}
+		for i := range result {
+			if result[i] != expected[i] {
+				t.Fatalf("expected: %s, got: %s\n", expected[i], result[i])
+			}
+		}
+	})
 }

@@ -75,7 +75,10 @@ const syntaxHeader = `Syntax
 const examplesHeader = `Examples
 --------
 
-.. code-block::
+.. io-code-block::
+   
+   .. input::
+      :language: bash
 `
 
 const tocHeader = `
@@ -121,7 +124,7 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 
 	if len(cmd.Example) > 0 {
 		buf.WriteString(examplesHeader)
-		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Example, " ")))
+		buf.WriteString(fmt.Sprintf("\n   %s\n\n   .. output::\n      :language: json\n      :visible: false\n\n      output", indentString(cmd.Example, " ")))
 	}
 
 	if hasRelatedCommands(cmd) {

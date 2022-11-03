@@ -124,6 +124,30 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Example, " ")))
 	}
 
+	if len(cmd.Annotations["Example2"]) > 0 {
+		buf.WriteString(`.. code-block::
+`)
+		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Annotations["Example2"], " ")))
+	}
+
+	if len(cmd.Annotations["Example3"]) > 0 {
+		buf.WriteString(`.. code-block::
+`)
+		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Annotations["Example3"], " ")))
+	}
+
+	if len(cmd.Annotations["Example4"]) > 0 {
+		buf.WriteString(`.. code-block::
+`)
+		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Annotations["Example4"], " ")))
+	}
+
+	if len(cmd.Annotations["Example5"]) > 0 {
+		buf.WriteString(`.. code-block::
+`)
+		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Annotations["Example5"], " ")))
+	}
+
 	if hasRelatedCommands(cmd) {
 		buf.WriteString("Related Commands\n")
 		buf.WriteString("----------------\n\n")

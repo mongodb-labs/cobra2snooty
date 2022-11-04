@@ -92,6 +92,9 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 	buf := new(bytes.Buffer)
 	name := cmd.CommandPath()
 
+	// Create example substrings
+	s := strings.Split(cmd.Example, "# ")
+
 	ref := strings.ReplaceAll(name, " ", separator)
 
 	buf.WriteString(".. _" + ref + ":\n\n")
@@ -119,33 +122,40 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 	}
 	printOptions(buf, cmd)
 
-	if len(cmd.Example) > 0 {
+	if len(s) > 0 && len(s) < 2 {
+		if len(cmd.Example) > 0 {
+			buf.WriteString(examplesHeader)
+			buf.WriteString(fmt.Sprintf("\n%s\n", indentString(cmd.Example, " ")))
+		}
+	}
+
+	if len(s) > 1 {
 		buf.WriteString(examplesHeader)
-		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Example, " ")))
+		buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(s[1], " ")))
 	}
 
-	if len(cmd.Annotations["Example2"]) > 0 {
+	if len(s) > 2 {
 		buf.WriteString(`.. code-block::
 `)
-		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Annotations["Example2"], " ")))
+		buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(s[2], " ")))
 	}
 
-	if len(cmd.Annotations["Example3"]) > 0 {
+	if len(s) > 3 {
 		buf.WriteString(`.. code-block::
 `)
-		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Annotations["Example3"], " ")))
+		buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(s[3], " ")))
 	}
 
-	if len(cmd.Annotations["Example4"]) > 0 {
+	if len(s) > 4 {
 		buf.WriteString(`.. code-block::
 `)
-		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Annotations["Example4"], " ")))
+		buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(s[4], " ")))
 	}
 
-	if len(cmd.Annotations["Example5"]) > 0 {
+	if len(s) > 5 {
 		buf.WriteString(`.. code-block::
 `)
-		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Annotations["Example5"], " ")))
+		buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(s[5], " ")))
 	}
 
 	if hasRelatedCommands(cmd) {

@@ -91,9 +91,6 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 	buf := new(bytes.Buffer)
 	name := cmd.CommandPath()
 
-	// Create example substrings
-	examples := strings.Split(cmd.Example, "# ")
-
 	ref := strings.ReplaceAll(name, " ", separator)
 
 	buf.WriteString(".. _" + ref + ":\n\n")
@@ -121,21 +118,20 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 	}
 	printOptions(buf, cmd)
 
-	// If it has an example but there's no #, print the example. If there's no example, don't print.
-	if len(examples) == 1 && len(cmd.Example) > 0 {
+	if cmd.Example != "" {
+		// Create example substrings
+		examples := strings.Split(cmd.Example, "# ")
 		buf.WriteString(examplesHeader)
-		buf.WriteString(`.. code-block::
-`)
-		buf.WriteString(fmt.Sprintf("\n%s\n", indentString(cmd.Example, " ")))
-	}
-
-	// If it has an example with a #, print the header, then print each in a code block.
-	if len(examples) > 1 {
-		buf.WriteString(examplesHeader)
-		for _, example := range examples[1:] {
+		if len(examples) == 1 { // If it has an example but there's no #, print the example. If there's no example, don't print.
 			buf.WriteString(`.. code-block::
+`)
+			buf.WriteString(fmt.Sprintf("\n%s\n", indentString(cmd.Example, " ")))
+		} else { // If it has an example with a #, print the header, then print each in a code block.
+			for _, example := range examples[1:] {
+				buf.WriteString(`.. code-block::
 			`)
-			buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(example, " ")))
+				buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(example, " ")))
+			}
 		}
 	}
 

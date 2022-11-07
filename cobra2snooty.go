@@ -120,18 +120,14 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 
 	if cmd.Example != "" {
 		// Create example substrings
-		examples := strings.Split(cmd.Example, "# ")
+		examplestrimmed := strings.TrimLeft(cmd.Example, "  #")
+		examples := strings.Split(examplestrimmed, "# ")
 		buf.WriteString(examplesHeader)
-		if len(examples) == 1 { // If it has an example but there's no #, print the example. If there's no example, don't print.
+		// If it has an example, print the header, then print each in a code block.
+		for _, example := range examples[0:] {
 			buf.WriteString(`.. code-block::
-`)
-			buf.WriteString(fmt.Sprintf("\n%s\n", indentString(cmd.Example, " ")))
-		} else { // If it has an example with a #, print the header, then print each in a code block.
-			for _, example := range examples[1:] {
-				buf.WriteString(`.. code-block::
 			`)
-				buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(example, " ")))
-			}
+			buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(example, " ")))
 		}
 	}
 

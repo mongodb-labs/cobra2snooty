@@ -36,13 +36,13 @@ func printExamples(buf *bytes.Buffer, cmd *cobra.Command) error {
 	for _, example := range examples[0:] {
 		if !strings.Contains(cmd.Example, "#") {
 			buf.WriteString(`.. code-block::
-			`)
+`)
 			buf.WriteString(fmt.Sprintf("\n   %s\n", indentString(example, " ")))
 		}
 		if strings.Contains(cmd.Example, "#") {
 
 			buf.WriteString(`.. code-block::
-	`)
+`)
 			buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(example, " ")))
 		}
 	}

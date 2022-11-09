@@ -71,10 +71,7 @@ func Echo() *cobra.Command {
 		Aliases: []string{"say"},
 		Short:   "Echo anything to the screen",
 		Long:    "an utterly useless command for testing",
-		Example: map[string]string{
-			"IntroText":   "# Example with intro text",
-			"NoIntroText": "atlas command no intro text",
-		},
+		Example: "  # Example with intro text\n  atlas command no intro text\n",
 		Annotations: map[string]string{
 			"string to printDesc": "A string to print",
 			"test paramDesc":      "just for testing",
@@ -133,10 +130,7 @@ func TestGenDocs(t *testing.T) {
 
 	checkStringContains(t, output, Echo().Long)
 	checkStringContains(t, output, Echo().Example)
-	checkStringContains(t, output, fmt.Sprintf(`.. code-block::
-	\n   %s\n`, Echo().Example[IntroText]))
-	checkStringContains(t, output, fmt.Sprintf(`.. code-block::
-	\n   #%s\n`, Echo().Example[NoIntroText]))
+	checkStringContains(t, output, fmt.Sprintf(`.. code-block::\n  # Example with intro text\n\n`))
 	checkStringContains(t, output, "boolone")
 	checkStringContains(t, output, "rootflag")
 	//

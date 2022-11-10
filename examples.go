@@ -27,9 +27,9 @@ const examplesHeader = `Examples
 
 `
 
-func printExamples(buf *bytes.Buffer, cmd *cobra.Command) error {
+func printExamples(buf *bytes.Buffer, cmd *cobra.Command) {
 	// Create example substrings
-	examplestrimmed := strings.TrimLeft(cmd.Example, "  #")
+	examplestrimmed := strings.TrimLeft(cmd.Example, " #")
 	examples := strings.Split(examplestrimmed, "# ")
 	buf.WriteString(examplesHeader)
 	// If it has an example, print the header, then print each in a code block.
@@ -37,15 +37,12 @@ func printExamples(buf *bytes.Buffer, cmd *cobra.Command) error {
 		if !strings.Contains(cmd.Example, "#") {
 			buf.WriteString(`.. code-block::
 `)
-			buf.WriteString(fmt.Sprintf("\n   %s\n", indentString(example, " ")))
+			buf.WriteString(fmt.Sprintf("\n  %s\n", indentString(example, " ")))
 		}
 		if strings.Contains(cmd.Example, "#") {
-
 			buf.WriteString(`.. code-block::
 `)
 			buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(example, " ")))
 		}
 	}
-
-	return nil
 }

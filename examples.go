@@ -22,10 +22,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const examplesHeader = `Examples
+const (
+	examplesHeader = `Examples
 --------
 
 `
+	identChar = " "
+)
 
 func printExamples(buf *bytes.Buffer, cmd *cobra.Command) {
 	// Create example substrings
@@ -34,15 +37,12 @@ func printExamples(buf *bytes.Buffer, cmd *cobra.Command) {
 	buf.WriteString(examplesHeader)
 	// If it has an example, print the header, then print each in a code block.
 	for _, example := range examples[0:] {
-		if !strings.Contains(cmd.Example, "#") {
-			buf.WriteString(`.. code-block::
-`)
-			buf.WriteString(fmt.Sprintf("\n  %s\n", indentString(example, " ")))
-		}
+		comment := ""
 		if strings.Contains(cmd.Example, "#") {
-			buf.WriteString(`.. code-block::
-`)
-			buf.WriteString(fmt.Sprintf("\n   #%s\n", indentString(example, " ")))
+			comment = "#"
 		}
+		buf.WriteString(`.. code-block::
+`)
+		buf.WriteString(fmt.Sprintf("\n   %s%s\n", comment, indentString(example, identChar)))
 	}
 }

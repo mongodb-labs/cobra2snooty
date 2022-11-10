@@ -72,12 +72,6 @@ const syntaxHeader = `Syntax
 .. code-block::
 `
 
-const examplesHeader = `Examples
---------
-
-.. code-block::
-`
-
 const tocHeader = `
 .. toctree::
    :titlesonly:
@@ -119,9 +113,8 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 	}
 	printOptions(buf, cmd)
 
-	if len(cmd.Example) > 0 {
-		buf.WriteString(examplesHeader)
-		buf.WriteString(fmt.Sprintf("\n%s\n\n", indentString(cmd.Example, " ")))
+	if cmd.Example != "" {
+		printExamples(buf, cmd)
 	}
 
 	if hasRelatedCommands(cmd) {

@@ -71,7 +71,7 @@ func Echo() *cobra.Command {
 		Aliases: []string{"say"},
 		Short:   "Echo anything to the screen",
 		Long:    "an utterly useless command for testing",
-		Example: " # Example with intro text\n  atlas command no intro text\n",
+		Example: " # Example with intro text\n atlas command no intro text\n",
 		Annotations: map[string]string{
 			"string to printDesc": "A string to print",
 			"test paramDesc":      "just for testing",

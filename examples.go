@@ -39,7 +39,7 @@ func printExamples(buf *bytes.Buffer, cmd *cobra.Command) {
 	for _, example := range examples[0:] {
 		comment := ""
 		if strings.Contains(cmd.Example, "#") {
-			comment = "#"
+			comment = " #"
 		}
 		buf.WriteString(`.. code-block::
 `)

@@ -71,7 +71,7 @@ func Echo() *cobra.Command {
 		Aliases: []string{"say"},
 		Short:   "Echo anything to the screen",
 		Long:    "an utterly useless command for testing",
-		Example: " # Example with intro text\n atlas command no intro text\n",
+		Example: "# Example with intro text\n atlas command no intro text\n",
 		Annotations: map[string]string{
 			"string to printDesc": "A string to print",
 			"test paramDesc":      "just for testing",
@@ -129,8 +129,7 @@ func TestGenDocs(t *testing.T) {
 	output := buf.String()
 
 	checkStringContains(t, output, Echo().Long)
-	checkStringContains(t, output, `
-  # Example with intro text
+	checkStringContains(t, output, `# Example with intro text
   atlas command no intro text
 `)
 	checkStringContains(t, output, "boolone")
@@ -157,8 +156,7 @@ func TestGenDocsNoHiddenParents(t *testing.T) {
 	output := buf.String()
 
 	checkStringContains(t, output, Echo().Long)
-	checkStringContains(t, output, `
-  # Example with intro text
+	checkStringContains(t, output, `# Example with intro text
   atlas command no intro text
 `)
 	checkStringContains(t, output, "boolone")

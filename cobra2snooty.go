@@ -101,6 +101,8 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 		}
 		buf.WriteString("\n" + long + "\n")
 	}
+
+	requiredRole(buf, cmd)
 	buf.WriteString("\n")
 
 	if cmd.Runnable() {

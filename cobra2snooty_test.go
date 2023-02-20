@@ -17,7 +17,6 @@ package cobra2snooty
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -190,7 +189,7 @@ func TestGenTreeDocs(t *testing.T) {
 		},
 	}
 
-	tmpdir, err := ioutil.TempDir("", "test-gen-rst-tree")
+	tmpdir, err := os.MkdirTemp("", "test-gen-rst-tree")
 	if err != nil {
 		t.Fatalf("Failed to create tmpdir: %s", err.Error())
 	}
@@ -206,7 +205,7 @@ func TestGenTreeDocs(t *testing.T) {
 }
 
 func BenchmarkGenDocsToFile(b *testing.B) {
-	file, err := ioutil.TempFile("", "")
+	file, err := os.CreateTemp("", "")
 	if err != nil {
 		b.Fatal(err)
 	}

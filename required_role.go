@@ -21,7 +21,8 @@ import (
 )
 
 func requiredRole(buf *bytes.Buffer, cmd *cobra.Command) {
-	if cmd.Annotations["requiredRole"] != "" {
-		buf.WriteString("\nTo use this command, the requesting user or API key must have the " + cmd.Annotations["requiredRole"] + " role.\n")
+	if cmd.Annotations["requiredRole"] == "" {
+		return
 	}
+	buf.WriteString("\nTo use this command, the requesting user or API key must have the " + cmd.Annotations["requiredRole"] + " role.\n")
 }

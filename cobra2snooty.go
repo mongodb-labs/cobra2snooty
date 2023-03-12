@@ -115,6 +115,9 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 	}
 	printOptions(buf, cmd)
 
+	printOutputCreate(buf, cmd)
+	buf.WriteString("\n")
+
 	if cmd.Example != "" {
 		printExamples(buf, cmd)
 	}

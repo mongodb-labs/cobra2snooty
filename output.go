@@ -29,7 +29,7 @@ const (
 `
 )
 
-// This function can return the output for create and delete commands when the output template is added as an annotation in the command file
+// This function can return the output for all commands when the output template is added as an annotation in the command file
 
 func printOutputCreate(buf *bytes.Buffer, cmd *cobra.Command) {
 	removerange := strings.ReplaceAll(cmd.Annotations["output"], "{{range .Results}}", "")

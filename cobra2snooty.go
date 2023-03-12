@@ -102,9 +102,6 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 		buf.WriteString("\n" + long + "\n")
 	}
 
-	requiredRole(buf, cmd)
-	buf.WriteString("\n")
-
 	if cmd.Runnable() {
 		buf.WriteString(syntaxHeader)
 		buf.WriteString(fmt.Sprintf("\n   %s\n\n", strings.ReplaceAll(cmd.UseLine(), "[flags]", "[options]")))

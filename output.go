@@ -29,6 +29,13 @@ const (
 `
 )
 
+const (
+	tabwriterMinWidth = 6
+	tabwriterWidth    = 4
+	tabwriterPadding  = 3
+	tabwriterPadChar  = ' '
+)
+
 // This function can return the output for all commands when the output template is added as an annotation in the command file
 
 func printOutputCreate(buf *bytes.Buffer, cmd *cobra.Command) {
@@ -43,7 +50,7 @@ func printOutputCreate(buf *bytes.Buffer, cmd *cobra.Command) {
 	output = strings.ReplaceAll(output, "%s", "<Name>")
 	output = strings.ReplaceAll(output, "\n", "\n   ")
 	w := new(tabwriter.Writer)
-	w.Init(buf, 6, 4, 3, ' ', 0)
+	w.Init(buf, tabwriterMinWidth, tabwriterWidth, tabwriterPadding, tabwriterPadChar, 0)
 
 	buf.WriteString(outputHeader)
 	buf.WriteString(`

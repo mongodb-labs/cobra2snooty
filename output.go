@@ -32,33 +32,27 @@ const (
 // This function can return the output for all commands when the output template is added as an annotation in the command file
 
 func printOutputCreate(buf *bytes.Buffer, cmd *cobra.Command) {
-	removerange := strings.ReplaceAll(cmd.Annotations["output"], "{{range .Results}}", "")
-	removeend := strings.ReplaceAll(removerange, "{{end}}", "")
-	bracketsremoved1 := strings.ReplaceAll(removeend, "{{.", "<")
-	bracketsremoved2 := strings.ReplaceAll(bracketsremoved1, "}}", ">")
-	replacevariable := strings.ReplaceAll(bracketsremoved2, "%s", "<Name>")
-	replacevariable2 := strings.ReplaceAll(replacevariable, "\n", "\n   ")
-	w := new(tabwriter.Writer)
-	w.Init(buf, 0, 0, 0, ' ', tabwriter.Debug|tabwriter.AlignRight)
-
 	if cmd.Annotations["output"] == "" {
 		return
 	}
 
+	output := strings.ReplaceAll(cmd.Annotations["output"], "{{range .Results}}", "")
+	output = strings.ReplaceAll(output, "{{end}}", "")
+	output = strings.ReplaceAll(output, "{{.", "<")
+	output = strings.ReplaceAll(output, "}}", ">")
+	output = strings.ReplaceAll(output, "%s", "<Name>")
+	output = strings.ReplaceAll(output, "\n", "\n   ")
+	w := new(tabwriter.Writer)
+	w.Init(buf, 6, 4, 3, ' ', 0)
+
 	buf.WriteString(outputHeader)
 	buf.WriteString(`
-If the command succeeds, the CLI prints a message similar to the following and replaces the values in brackets with your values. The | symbol represents a horizontal tab.
+If the command succeeds, the CLI prints a message similar to the following and replaces the values in brackets with your values:
 
 .. code-block::
 
-`)
-	if strings.HasSuffix(cmd.Annotations["output"], "}"+"\n") {
-		fmt.Fprintln(w, replacevariable2)
-		w.Flush()
-	} else {
-		buf.WriteString("   ")
-		fmt.Fprintln(w, replacevariable2)
-		w.Flush()
-	}
+   `)
+	fmt.Fprintln(w, output)
+	w.Flush()
 	buf.WriteString("\n")
 }

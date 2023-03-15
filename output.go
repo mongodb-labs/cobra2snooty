@@ -48,18 +48,19 @@ func printOutputCreate(buf *bytes.Buffer, cmd *cobra.Command) {
 	output = strings.ReplaceAll(output, "{{.", "<")
 	output = strings.ReplaceAll(output, "}}", ">")
 	output = strings.ReplaceAll(output, "%s", "<Name>")
+	output = strings.Replace(output, "   ", "", 1)
 	output = strings.ReplaceAll(output, "\n", "\n   ")
 	w := new(tabwriter.Writer)
 	w.Init(buf, tabwriterMinWidth, tabwriterWidth, tabwriterPadding, tabwriterPadChar, 0)
 
 	buf.WriteString(outputHeader)
 	buf.WriteString(`
-If the command succeeds, the CLI prints a message similar to the following and replaces the values in brackets with your values:
+If the command succeeds, the CLI returns output similar to the following sample. Values in brackets represent your values.
 
 .. code-block::
 
-   `)
-	fmt.Fprintln(w, output)
+`)
+	fmt.Fprintln(w, "   "+output)
 	w.Flush()
 	buf.WriteString("\n")
 }

@@ -1,7 +1,7 @@
 <!--
-Thanks for contributing to MongoDB Ops Manager Go Client!
+Thanks for contributing to cobra2snooty
 
-Before you submit your pull request, please be sure that you've reviewed our contributing guidelines: https://github.com/mongodb/go-client-mongodb-ops-manager/blob/master/CONTRIBUTING.md
+Before you submit your pull request, please be sure that you've reviewed our contributing guidelines: https://github.com/mongodb-labs/cobra2snooty/blob/master/CONTRIBUTING.md
 
 Please fill out the information below to help speed the review along, and hopefully
 the merge of your pull request!

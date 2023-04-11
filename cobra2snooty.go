@@ -70,6 +70,7 @@ const syntaxHeader = `Syntax
 ------
 
 .. code-block::
+   :caption: Command Syntax
 `
 
 const tocHeader = `

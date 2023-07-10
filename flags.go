@@ -73,7 +73,17 @@ func FlagUsages(f *pflag.FlagSet) string {
 			}
 		}
 
-		line += "\n    - " + usage
+		if len(flag.Annotations["cobra_annotation_mutually_exclusive"]) != 0 {
+			mutuale := fmt.Sprintf("%v", flag.Annotations["cobra_annotation_mutually_exclusive"])
+			mutuale = strings.ReplaceAll(mutuale, "]", "")
+			mutuale = strings.ReplaceAll(mutuale, "[", "")
+			mutuale = strings.ReplaceAll(mutuale, flag.Name+" ", "")
+			mutuale = strings.ReplaceAll(mutuale, " "+flag.Name, "")
+			mutuale = strings.ReplaceAll(mutuale, " ", ", --")
+			line += "\n    - " + usage + "\n\n      Mutually exclusive with --" + mutuale + "."
+		} else {
+			line += "\n    - " + usage
+		}
 		if !defaultIsZeroValue(flag) {
 			if flag.Value.Type() == stringType {
 				line += fmt.Sprintf(" This value defaults to %q.", flag.DefValue)

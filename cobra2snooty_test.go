@@ -27,21 +27,21 @@ import (
 
 func emptyRun(*cobra.Command, []string) {}
 
-var cmd *cobra.Command
+var rootCmd *cobra.Command
 var echoCmd *cobra.Command
 
 func Root() *cobra.Command {
-	if cmd != nil {
-		return cmd
+	if rootCmd != nil {
+		return rootCmd
 	}
-	cmd = &cobra.Command{
+	rootCmd = &cobra.Command{
 		Use:   "root",
 		Short: "Root short description",
 		Long:  "Root long description",
 		Run:   emptyRun,
 	}
-	cmd.PersistentFlags().StringP("rootflag", "r", "two", "")
-	cmd.PersistentFlags().StringP("strtwo", "t", "two", "help message for parent flag strtwo")
+	rootCmd.PersistentFlags().StringP("rootflag", "r", "two", "")
+	rootCmd.PersistentFlags().StringP("strtwo", "t", "two", "help message for parent flag strtwo")
 
 	printCmd := &cobra.Command{
 		Use:   "print [string to print]",
@@ -57,8 +57,8 @@ func Root() *cobra.Command {
 		Short: "Performs a dummy action",
 	}
 
-	cmd.AddCommand(printCmd, Echo(), dummyCmd)
-	return cmd
+	rootCmd.AddCommand(printCmd, Echo(), dummyCmd)
+	return rootCmd
 }
 
 func Echo() *cobra.Command {

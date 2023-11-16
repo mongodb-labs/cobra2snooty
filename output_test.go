@@ -34,7 +34,7 @@ func TestPrintOutputCreate(t *testing.T) {
 
 `
 
-		cmd = &cobra.Command{
+		cmd := &cobra.Command{
 			Annotations: map[string]string{
 				"output": outputTemplate,
 			},

@@ -17,6 +17,7 @@ package cobra2snooty
 import (
 	"bytes"
 	"fmt"
+	"regexp"
 	"strings"
 	"text/tabwriter"
 
@@ -27,6 +28,12 @@ const (
 	outputHeader = `Output
 ------
 `
+	outputDescription = `
+If the command succeeds, the CLI returns output similar to the following sample. Values in brackets represent your values.
+
+.. code-block::
+
+`
 )
 
 const (
@@ -36,6 +43,9 @@ const (
 	tabwriterPadChar  = ' '
 )
 
+// regex for one or more characters except right curly bracket '}'.
+const charsExceptRightCurlyBracket = "[^}]+"
+
 // This function can return the output for all commands when the output template is added as an annotation in the command file
 
 func printOutputCreate(buf *bytes.Buffer, cmd *cobra.Command) {
@@ -43,7 +53,8 @@ func printOutputCreate(buf *bytes.Buffer, cmd *cobra.Command) {
 		return
 	}
 
-	output := strings.ReplaceAll(cmd.Annotations["output"], "{{range .Results}}", "")
+	output := removeRange(cmd.Annotations["output"])
+	output = replaceWithValueOrDefault(output)
 	output = strings.ReplaceAll(output, "{{end}}", "")
 	output = strings.ReplaceAll(output, "{{.", "<")
 	output = strings.ReplaceAll(output, "}}", ">")
@@ -54,13 +65,24 @@ func printOutputCreate(buf *bytes.Buffer, cmd *cobra.Command) {
 	w.Init(buf, tabwriterMinWidth, tabwriterWidth, tabwriterPadding, tabwriterPadChar, 0)
 
 	buf.WriteString(outputHeader)
-	buf.WriteString(`
-If the command succeeds, the CLI returns output similar to the following sample. Values in brackets represent your values.
-
-.. code-block::
-
-`)
+	buf.WriteString(outputDescription)
 	fmt.Fprintln(w, "   "+output)
 	w.Flush()
 	buf.WriteString("\n")
+}
+
+func removeRange(text string) string {
+	// remove {{range}} control structure. Examples: {{range .}}, {{range .Results}}
+	re := `{{range ` + charsExceptRightCurlyBracket + `}}`
+	return regexp.MustCompile(re).ReplaceAllString(text, "")
+}
+
+func replaceWithValueOrDefault(text string) string {
+	// replaces {{if .field}}{{.field}}{{else}}defaultValue{{end}} with {{.field}}
+	re := `{{if` + charsExceptRightCurlyBracket + `}}` +
+		`({{` + charsExceptRightCurlyBracket + `}})` +
+		`{{else}}` + charsExceptRightCurlyBracket + `{{end}}`
+
+	// $1 is the first group (surrounded by round brackets in the regex expression)
+	return regexp.MustCompile(re).ReplaceAllString(text, "$1")
 }

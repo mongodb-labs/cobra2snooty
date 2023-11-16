@@ -22,7 +22,6 @@ import (
 )
 
 func TestPrintOutputCreate(t *testing.T) {
-
 	t.Run("replaceWithValueOrDefault", func(t *testing.T) {
 		outputTemplate := `ID	NAME	DATABASE	COLLECTION	TYPE   
 {{range .}}{{.IndexID}}	%s	{{.Database}}	{{.CollectionName}}	{{if .Type }}{{.Type}}{{else}}defaultValue{{end}}

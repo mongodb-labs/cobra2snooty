@@ -107,7 +107,7 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 
 	if cmd.Runnable() {
 		buf.WriteString(syntaxHeader)
-		buf.WriteString(fmt.Sprintf("\n   %s\n\n", strings.ReplaceAll(cmd.UseLine(), "[flags]", "[options]")))
+		_, _ = fmt.Fprintf(buf, "\n   %s\n\n", strings.ReplaceAll(cmd.UseLine(), "[flags]", "[options]"))
 		buf.WriteString(".. Code end marker, please don't delete this comment\n\n")
 	}
 	if err := printArgs(buf, cmd); err != nil {
@@ -134,7 +134,7 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 			}
 			cname := name + " " + child.Name()
 			ref = strings.ReplaceAll(cname, " ", separator)
-			buf.WriteString(fmt.Sprintf("* :ref:`%s` - %s\n", ref, child.Short))
+			_, _ = fmt.Fprintf(buf, "* :ref:`%s` - %s\n", ref, child.Short)
 		}
 		buf.WriteString("\n")
 	}
@@ -150,7 +150,7 @@ func GenDocs(cmd *cobra.Command, w io.Writer) error {
 			}
 			cname := name + " " + child.Name()
 			ref = strings.ReplaceAll(cname, " ", separator)
-			buf.WriteString(fmt.Sprintf("   %s </command/%s>\n", child.Name(), ref))
+			_, _ = fmt.Fprintf(buf, "   %s </command/%s>\n", child.Name(), ref)
 		}
 		buf.WriteString("\n")
 	}

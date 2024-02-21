@@ -33,7 +33,7 @@ const (
 
 var (
 	varnameMap = map[string]string{
-		"stringToString": "string",
+		"stringToString": "key=value",
 	}
 )
 

@@ -31,6 +31,12 @@ const (
 	nilValue   = "<nil>"
 )
 
+var (
+	varnameMap = map[string]string{
+		"stringToString": "string",
+	}
+)
+
 func FlagUsages(f *pflag.FlagSet) string {
 	buf := new(bytes.Buffer)
 
@@ -41,6 +47,7 @@ func FlagUsages(f *pflag.FlagSet) string {
 
 		line := ""
 		varname, usage := pflag.UnquoteUsage(flag)
+		varname = mapVarname(varname)
 		const defaultIndentation = 6
 		usage = strings.ReplaceAll(usage, "\n", "\n"+strings.Repeat(" ", defaultIndentation))
 
@@ -131,4 +138,13 @@ func defaultIsZeroValue(f *pflag.Flag) bool {
 		}
 		return false
 	}
+}
+
+func mapVarname(varname string) string {
+	mapped, found := varnameMap[varname]
+	if !found {
+		return varname
+	}
+
+	return mapped
 }

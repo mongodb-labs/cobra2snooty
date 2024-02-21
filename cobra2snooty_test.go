@@ -142,7 +142,7 @@ func TestGenDocs(t *testing.T) {
 	checkStringOmits(t, output, deprecatedCmd.Short)
 
 	// Verify that the text "This value defaults to" is not printed when the default value is provided to StringToStringP
-	checkStringContains(t, output, "* - -x, --stringtostring\n     - stringToString\n     - false\n     - help message for flag stringtostring\n   *")
+	checkStringContains(t, output, "* - -x, --stringtostring\n     - string\n     - false\n     - help message for flag stringtostring\n   *")
 }
 
 func TestGenDocsNoHiddenParents(t *testing.T) {

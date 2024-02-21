@@ -80,6 +80,7 @@ func Echo() *cobra.Command {
 	echoCmd.PersistentFlags().BoolP("persistentbool", "p", false, "help message for flag persistentbool")
 	echoCmd.Flags().IntP("intone", "i", 123, "help message for flag intone")
 	echoCmd.Flags().BoolP("boolone", "b", true, "help message for flag boolone")
+	echoCmd.Flags().StringToStringP("stringtostring", "x", nil, "help message for flag stringtostring")
 
 	timesCmd := &cobra.Command{
 		Use:        "times [# times] [string to echo]",
@@ -139,6 +140,9 @@ func TestGenDocs(t *testing.T) {
 	checkStringOmits(t, output, Root().Short)
 	checkStringContains(t, output, EchoSubCmd().Short)
 	checkStringOmits(t, output, deprecatedCmd.Short)
+
+	// Verify that the text "This value defaults to" is not printed when the default value is provided to StringToStringP
+	checkStringContains(t, output, "* - -x, --stringtostring\n     - stringToString\n     - false\n     - help message for flag stringtostring\n   *")
 }
 
 func TestGenDocsNoHiddenParents(t *testing.T) {

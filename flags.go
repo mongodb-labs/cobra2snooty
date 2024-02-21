@@ -116,7 +116,7 @@ func defaultIsZeroValue(f *pflag.Flag) bool {
 		return f.DefValue == ""
 	case "ip", "ipMask", "ipNet":
 		return f.DefValue == nilValue
-	case "intSlice", "stringSlice", "stringArray":
+	case "intSlice", "stringSlice", "stringArray", "stringToString":
 		return f.DefValue == "[]"
 	default:
 		switch f.Value.String() {

@@ -42,6 +42,7 @@ func printExamples(buf *bytes.Buffer, cmd *cobra.Command) {
 			comment = " #"
 		}
 		buf.WriteString(`.. code-block::
+   :copyable: false
 `)
 		_, _ = fmt.Fprintf(buf, "\n  %s%s\n", comment, indentString(example, identChar))
 	}

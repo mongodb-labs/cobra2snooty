@@ -30,6 +30,18 @@ const (
 	identChar = " "
 )
 
+func DefaultExampleFormatter(buf *bytes.Buffer, cmd *cobra.Command) {
+	if cmd.Example != "" {
+		printExamples(buf, cmd)
+	}
+}
+
+func WithCustomExampleFormatter(customFormatter func(buf *bytes.Buffer, cmd *cobra.Command)) func(options *GenDocsOptions) {
+	return func(options *GenDocsOptions) {
+		options.exampleFormatter = customFormatter
+	}
+}
+
 func printExamples(buf *bytes.Buffer, cmd *cobra.Command) {
 	// Create example substrings
 	examplestrimmed := strings.TrimLeft(cmd.Example, " #")

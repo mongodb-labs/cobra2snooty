@@ -318,7 +318,7 @@ func TestGenDocsSnapshots(t *testing.T) {
 					return time.Date(2025, 3, 5, 17, 0, 0, 0, time.UTC)
 				}),
 				WithCustomExampleFormatter(func(buf *bytes.Buffer, cmd *cobra.Command) {
-					_, _ = buf.WriteString(fmt.Sprintf("custom example for %s\n", cmd.Use))
+					_, _ = fmt.Fprintf(buf, "custom example for %s\n", cmd.Use)
 					_, _ = buf.WriteString(cmd.Example)
 				}),
 			},

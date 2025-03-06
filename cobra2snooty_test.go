@@ -353,7 +353,7 @@ func TestGenDocsSnapshots(t *testing.T) {
 			// Execute function
 			err := GenDocs(tt.cmd, buf, tt.options...)
 			if err != nil {
-				t.Errorf("GenDocs() error = %v", err)
+				t.Fatalf("GenDocs() error = %v", err)
 				return
 			}
 

@@ -21,7 +21,9 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
+	"github.com/bradleyjkemp/cupaloy/v2"
 	"github.com/spf13/cobra"
 )
 
@@ -281,4 +283,85 @@ func TestArgsRegex(t *testing.T) {
 			}
 		}
 	})
+}
+
+// To update snapshots run: UPDATE_SNAPSHOTS=true go test ./...
+func TestGenDocsSnapshots(t *testing.T) {
+	// Test cases
+	tests := []struct {
+		name    string
+		cmd     *cobra.Command
+		options []GenDocsOption
+	}{
+		{
+			name: "default_example",
+			cmd: &cobra.Command{
+				Use:     "default_example",
+				Long:    "Testing example output using the default example formatter",
+				Example: "example --test -v",
+			},
+			options: []GenDocsOption{
+				WithCustomTimeGetter(func() time.Time {
+					return time.Date(2025, 3, 5, 17, 0, 0, 0, time.UTC)
+				}),
+			},
+		},
+		{
+			name: "custom_formatter_example",
+			cmd: &cobra.Command{
+				Use:     "custom_example",
+				Long:    "Testing example output using a custom example formatter",
+				Example: "example --test -v",
+			},
+			options: []GenDocsOption{
+				WithCustomTimeGetter(func() time.Time {
+					return time.Date(2025, 3, 5, 17, 0, 0, 0, time.UTC)
+				}),
+				WithCustomExampleFormatter(func(buf *bytes.Buffer, cmd *cobra.Command) {
+					_, _ = fmt.Fprintf(buf, "custom example for %s\n", cmd.Use)
+					_, _ = buf.WriteString(cmd.Example)
+				}),
+			},
+		},
+		{
+			name: "custom_formatter_surround_default_example",
+			cmd: &cobra.Command{
+				Use:     "custom_formatter_surround_default_example",
+				Long:    "Testing example output using a custom example formatter which calls the default formatter",
+				Example: "example --test -v",
+			},
+			options: []GenDocsOption{
+				WithCustomTimeGetter(func() time.Time {
+					return time.Date(2025, 3, 5, 17, 0, 0, 0, time.UTC)
+				}),
+				WithCustomExampleFormatter(func(buf *bytes.Buffer, cmd *cobra.Command) {
+					_, _ = buf.WriteString("-- before example --\n")
+					DefaultExampleFormatter(buf, cmd)
+					_, _ = buf.WriteString("-- after example --\n")
+				}),
+			},
+		},
+	}
+
+	// Run tests
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			snapshotter := cupaloy.New(cupaloy.SnapshotFileExtension(".txt"))
+			// Create buffer to capture output
+			buf := new(bytes.Buffer)
+
+			// Execute function
+			err := GenDocs(tt.cmd, buf, tt.options...)
+			if err != nil {
+				t.Fatalf("GenDocs() error = %v", err)
+				return
+			}
+
+			// Compare with snapshot
+			err = snapshotter.SnapshotWithName(tt.name, buf.String())
+			if err != nil {
+				t.Errorf("Snapshot comparison failed: %v", err)
+			}
+		})
+	}
 }

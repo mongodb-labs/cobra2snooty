@@ -48,14 +48,14 @@ func printExamples(w io.Writer, cmd *cobra.Command) {
 	// Create example substrings
 	examplestrimmed := strings.TrimLeft(cmd.Example, " #")
 	examples := strings.Split(examplestrimmed, "# ")
-	w.Write([]byte(examplesHeader))
+	_, _ = w.Write([]byte(examplesHeader))
 	// If it has an example, print the header, then print each in a code block.
 	for _, example := range examples[0:] {
 		comment := ""
 		if strings.Contains(cmd.Example, "#") {
 			comment = " #"
 		}
-		w.Write([]byte(`.. code-block::
+		_, _ = w.Write([]byte(`.. code-block::
    :copyable: false
 `))
 		_, _ = fmt.Fprintf(w, "\n  %s%s\n", comment, indentString(example, identChar))

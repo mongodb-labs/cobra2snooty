@@ -17,6 +17,7 @@ package cobra2snooty
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -317,9 +318,9 @@ func TestGenDocsSnapshots(t *testing.T) {
 				WithCustomTimeGetter(func() time.Time {
 					return time.Date(2025, 3, 5, 17, 0, 0, 0, time.UTC)
 				}),
-				WithCustomExampleFormatter(func(buf *bytes.Buffer, cmd *cobra.Command) {
-					_, _ = fmt.Fprintf(buf, "custom example for %s\n", cmd.Use)
-					_, _ = buf.WriteString(cmd.Example)
+				WithCustomExampleFormatter(func(w io.Writer, cmd *cobra.Command) {
+					_, _ = fmt.Fprintf(w, "custom example for %s\n", cmd.Use)
+					_, _ = w.Write([]byte(cmd.Example))
 				}),
 			},
 		},
@@ -334,10 +335,10 @@ func TestGenDocsSnapshots(t *testing.T) {
 				WithCustomTimeGetter(func() time.Time {
 					return time.Date(2025, 3, 5, 17, 0, 0, 0, time.UTC)
 				}),
-				WithCustomExampleFormatter(func(buf *bytes.Buffer, cmd *cobra.Command) {
-					_, _ = buf.WriteString("-- before example --\n")
-					DefaultExampleFormatter(buf, cmd)
-					_, _ = buf.WriteString("-- after example --\n")
+				WithCustomExampleFormatter(func(w io.Writer, cmd *cobra.Command) {
+					_, _ = w.Write([]byte("-- before example --\n"))
+					DefaultExampleFormatter(w, cmd)
+					_, _ = w.Write([]byte("-- after example --\n"))
 				}),
 			},
 		},

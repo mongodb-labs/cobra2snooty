@@ -15,8 +15,8 @@
 package cobra2snooty
 
 import (
-	"bytes"
 	"fmt"
+	"io"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -30,32 +30,34 @@ const (
 	identChar = " "
 )
 
-func DefaultExampleFormatter(buf *bytes.Buffer, cmd *cobra.Command) {
+type ExampleFormatter func(w io.Writer, cmd *cobra.Command)
+
+func DefaultExampleFormatter(w io.Writer, cmd *cobra.Command) {
 	if cmd.Example != "" {
-		printExamples(buf, cmd)
+		printExamples(w, cmd)
 	}
 }
 
-func WithCustomExampleFormatter(customFormatter func(buf *bytes.Buffer, cmd *cobra.Command)) func(options *GenDocsOptions) {
+func WithCustomExampleFormatter(customFormatter ExampleFormatter) func(options *GenDocsOptions) {
 	return func(options *GenDocsOptions) {
 		options.exampleFormatter = customFormatter
 	}
 }
 
-func printExamples(buf *bytes.Buffer, cmd *cobra.Command) {
+func printExamples(w io.Writer, cmd *cobra.Command) {
 	// Create example substrings
 	examplestrimmed := strings.TrimLeft(cmd.Example, " #")
 	examples := strings.Split(examplestrimmed, "# ")
-	buf.WriteString(examplesHeader)
+	_, _ = w.Write([]byte(examplesHeader))
 	// If it has an example, print the header, then print each in a code block.
 	for _, example := range examples[0:] {
 		comment := ""
 		if strings.Contains(cmd.Example, "#") {
 			comment = " #"
 		}
-		buf.WriteString(`.. code-block::
+		_, _ = w.Write([]byte(`.. code-block::
    :copyable: false
-`)
-		_, _ = fmt.Fprintf(buf, "\n  %s%s\n", comment, indentString(example, identChar))
+`))
+		_, _ = fmt.Fprintf(w, "\n  %s%s\n", comment, indentString(example, identChar))
 	}
 }

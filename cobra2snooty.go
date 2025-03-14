@@ -35,12 +35,12 @@ const (
 )
 
 // GenTreeDocs generates the docs for the full tree of commands.
-func GenTreeDocs(cmd *cobra.Command, dir string) error {
+func GenTreeDocs(cmd *cobra.Command, dir string, genDocOptions ...GenDocsOption) error {
 	for _, c := range cmd.Commands() {
 		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() {
 			continue
 		}
-		if err := GenTreeDocs(c, dir); err != nil {
+		if err := GenTreeDocs(c, dir, genDocOptions...); err != nil {
 			return err
 		}
 	}
@@ -53,7 +53,7 @@ func GenTreeDocs(cmd *cobra.Command, dir string) error {
 	}
 	defer f.Close()
 
-	return GenDocs(cmd, f)
+	return GenDocs(cmd, f, genDocOptions...)
 }
 
 const toc = `
@@ -198,7 +198,7 @@ func (s byName) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 func (s byName) Less(i, j int) bool { return s[i].Name() < s[j].Name() }
 
 type GenDocsOptions struct {
-	exampleFormatter func(buf *bytes.Buffer, cmd *cobra.Command)
+	exampleFormatter ExampleFormatter
 	timeGetter       func() time.Time
 }
 

@@ -9,7 +9,7 @@ updates:
     commit-message:
       prefix: "chore"
     reviewers:
-      - "mongodb/apix-2"
+      - "mongodb-labs/apix-2"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
@@ -18,4 +18,4 @@ updates:
     commit-message:
       prefix: "chore"
     reviewers:
-      - "mongodb/apix-2"
+      - "mongodb-labs/apix-2"

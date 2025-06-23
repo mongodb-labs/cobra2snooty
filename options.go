@@ -49,13 +49,13 @@ func printArgs(buf *bytes.Buffer, cmd *cobra.Command) error {
 	buf.WriteString(optionsHeader)
 	for _, a := range u {
 		value := a[1 : len(a)-1]
-		if description, hasDescription := cmd.Annotations[value+"Desc"]; hasDescription {
-			required := strings.HasPrefix(a, "<")
-			line := fmt.Sprintf("   * - %s\n     - string\n     - %v\n     - %s\n", value, required, description)
-			buf.WriteString(line)
-		} else {
+		description, hasDescription := cmd.Annotations[value+"Desc"]
+		if !hasDescription {
 			return fmt.Errorf("%w: %s - %s", ErrMissingDescription, cmd.CommandPath(), value)
 		}
+		required := strings.HasPrefix(a, "<")
+		line := fmt.Sprintf("   * - %s\n     - string\n     - %v\n     - %s\n", value, required, description)
+		buf.WriteString(line)
 	}
 	buf.WriteString("\n")
 

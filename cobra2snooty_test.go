@@ -196,11 +196,10 @@ func TestGenTreeDocs(t *testing.T) {
 		},
 	}
 
-	tmpdir, err := os.MkdirTemp("", "test-gen-rst-tree")
-	if err != nil {
-		t.Fatalf("Failed to create tmpdir: %s", err.Error())
-	}
-	defer os.RemoveAll(tmpdir)
+	tmpdir := t.TempDir()
+	t.Cleanup(func() {
+		_ = os.RemoveAll(tmpdir)
+	})
 
 	if err := GenTreeDocs(c, tmpdir); err != nil {
 		t.Fatalf("GenTreeDocs failed: %s", err.Error())
@@ -212,12 +211,14 @@ func TestGenTreeDocs(t *testing.T) {
 }
 
 func BenchmarkGenDocsToFile(b *testing.B) {
-	file, err := os.CreateTemp("", "")
+	file, err := os.CreateTemp(b.TempDir(), "")
 	if err != nil {
 		b.Fatal(err)
 	}
-	defer os.Remove(file.Name())
-	defer file.Close()
+	b.Cleanup(func() {
+		_ = file.Close()
+		_ = os.Remove(file.Name())
+	})
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {

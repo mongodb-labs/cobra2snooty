@@ -29,6 +29,7 @@ linters:
     - unparam
     - unused
     - usestdlibvars
+    - usetesting
     - whitespace
   settings:
     gocritic:

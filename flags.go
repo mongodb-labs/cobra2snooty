@@ -45,7 +45,7 @@ func FlagUsages(f *pflag.FlagSet) string {
 			return
 		}
 
-		line := ""
+		var line string
 		varname, usage := pflag.UnquoteUsage(flag)
 		varname = mapVarname(varname)
 		const defaultIndentation = 6

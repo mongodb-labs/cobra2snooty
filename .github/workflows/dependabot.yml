@@ -24,12 +24,12 @@
           fetch-depth: 2
       - name: set Apix Bot token
         id: app-token
-        uses: mongodb/apix-action/token@3024080388613583e3bd119bfb1ab4b4dbf43c42
+        uses: mongodb/apix-action/token@0b4aae9c2ca7cc2901ec05c43e4a544789cfebb2
         with:
           app-id: ${{ secrets.APIXBOT_APP_ID }}
           private-key: ${{ secrets.APIXBOT_APP_PEM }}
       - name: Create JIRA ticket
-        uses: mongodb/apix-action/create-jira@v8
+        uses: mongodb/apix-action/create-jira@v10
         id: create
         with:
           token: ${{ secrets.JIRA_API_TOKEN }}

@@ -6,8 +6,8 @@ toolchain go1.22.12
 
 require (
 	github.com/bradleyjkemp/cupaloy/v2 v2.8.0
-	github.com/spf13/cobra v1.9.1
-	github.com/spf13/pflag v1.0.7
+	github.com/spf13/cobra v1.10.1
+	github.com/spf13/pflag v1.0.9
 )
 
 require (

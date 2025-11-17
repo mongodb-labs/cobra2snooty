@@ -24,7 +24,7 @@
           fetch-depth: 2
       - name: set Apix Bot token
         id: app-token
-        uses: mongodb/apix-action/token@96a8c360685f1827a4c867565f8b3d412d3067f7
+        uses: mongodb/apix-action/token@6c3fde402c21942fa46cde003f190c2b23c59530
         with:
           app-id: ${{ secrets.APIXBOT_APP_ID }}
           private-key: ${{ secrets.APIXBOT_APP_PEM }}

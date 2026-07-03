@@ -1,0 +1,18 @@
+# sync -> mongodb/mongodb-atlas-local
+# sync -> mongodb/atlas-local-lib
+# sync -> mongodb/atlas-local-cli
+# sync -> mongodb-js/atlas-local-lib-js
+# sync -> mongodb-labs/cobra2snooty
+
+name: Close Jira Ticket on Issue Close
+
+on:
+  issues:
+    types: [closed]
+
+permissions: {}
+
+jobs:
+  close-jira:
+    uses: mongodb/apix-action/.github/workflows/_issue-closed.yaml@main
+    secrets: inherit

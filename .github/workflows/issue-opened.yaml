@@ -1,9 +1,4 @@
-# sync -> mongodb/mongodb-atlas-local
-# sync -> mongodb/atlas-local-lib
-# sync -> mongodb/atlas-local-cli
-# sync -> mongodb-js/atlas-local-lib-js
-# sync -> mongodb-labs/cobra2snooty
-
+# synced from apix-actions/.github/workflows/issue-opened.yaml
 name: Create Jira Ticket for New Issues
 
 on:
@@ -14,5 +9,8 @@ permissions: {}
 
 jobs:
   create-jira:
+    permissions:
+      contents: read
+      issues: write
     uses: mongodb/apix-action/.github/workflows/_issue-opened.yaml@main
     secrets: inherit

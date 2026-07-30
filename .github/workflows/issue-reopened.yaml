@@ -1,9 +1,4 @@
-# sync -> mongodb/mongodb-atlas-local
-# sync -> mongodb/atlas-local-lib
-# sync -> mongodb/atlas-local-cli
-# sync -> mongodb-js/atlas-local-lib-js
-# sync -> mongodb-labs/cobra2snooty
-
+# synced from apix-actions/.github/workflows/issue-reopened.yaml
 name: Reopen Jira Ticket on Issue Reopen
 
 on:
@@ -14,5 +9,8 @@ permissions: {}
 
 jobs:
   reopen-jira:
+    permissions:
+      contents: read
+      issues: read
     uses: mongodb/apix-action/.github/workflows/_issue-reopened.yaml@main
     secrets: inherit

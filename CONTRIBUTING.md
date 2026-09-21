@@ -23,7 +23,7 @@ using the following email alias: [community-conduct@mongodb.com](mailto:communit
 
 #### Prerequisite Tools
 - [Git](https://git-scm.com/)
-- [Go (at least Go 1.18)](https://golang.org/dl/)
+- [Go (at least Go 1.24)](https://golang.org/dl/)
 
 #### Environment
 - Fork the repository.

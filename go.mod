@@ -1,8 +1,8 @@
 module github.com/mongodb-labs/cobra2snooty
 
-go 1.22
+go 1.24
 
-toolchain go1.22.12
+toolchain go1.24.5
 
 require (
 	github.com/bradleyjkemp/cupaloy/v2 v2.8.0

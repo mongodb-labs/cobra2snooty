@@ -29,7 +29,7 @@
           app-id: ${{ secrets.APIXBOT_APP_ID }}
           private-key: ${{ secrets.APIXBOT_APP_PEM }}
       - name: Create JIRA ticket
-        uses: mongodb/apix-action/create-jira@v13
+        uses: mongodb/apix-action/create-jira@v16
         id: create
         with:
           token: ${{ secrets.JIRA_API_TOKEN }}

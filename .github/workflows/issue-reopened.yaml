@@ -12,5 +12,6 @@ jobs:
     permissions:
       contents: read
       issues: read
-    uses: mongodb/apix-action/.github/workflows/_issue-reopened.yaml@36ab0feb226f7b9e296fa663f46f21c14ea0d9ac
-    secrets: inherit
+    uses: mongodb/apix-action/.github/workflows/_issue-reopened.yaml@58bed0c5e3362646ee6450a40f1bfa323be50991
+    secrets:
+      op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}

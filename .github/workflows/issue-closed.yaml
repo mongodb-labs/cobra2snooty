@@ -12,6 +12,6 @@ jobs:
     permissions:
       contents: read
       issues: read
-    uses: mongodb/apix-action/.github/workflows/_issue-closed.yaml@58bed0c5e3362646ee6450a40f1bfa323be50991
+    uses: mongodb/apix-action/.github/workflows/_issue-closed.yaml@d7255aaf580297b59b65039bd071a376549984d0
     secrets:
       op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}

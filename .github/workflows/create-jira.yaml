@@ -13,6 +13,6 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    uses: mongodb/apix-action/.github/workflows/_create-jira.yaml@82fcb87b9fb3c764337b88b3da492b4b51d3f4d1
+    uses: mongodb/apix-action/.github/workflows/_create-jira.yaml@a2e7c3cf16582572c138d7586611087dd7b52154
     secrets:
       op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
